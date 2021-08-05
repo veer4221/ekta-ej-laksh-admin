@@ -13,14 +13,21 @@ import {
   CNavItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 import { AppBreadcrumb } from './index'
 
 import { AppHeaderDropdown } from './header/index'
+import { IconButton } from '@material-ui/core'
+import { signout } from 'src/Redux/Actions'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
+
+  const logout = () => {
+    dispatch(signout())
+  }
 
   return (
     <CHeader position="sticky" className="mb-4 text-right">
@@ -68,6 +75,9 @@ const AppHeader = () => {
         <p style={{ textAlign: 'Right' }}>
           hii..<b>VeerPatel</b>
           <AccountBoxIcon style={{ color: 'gray', fontSize: 40 }} />
+          <IconButton>
+            <ExitToAppIcon onClick={logout} />
+          </IconButton>
         </p>
       </CContainer>
       {/* <CHeaderDivider /> */}

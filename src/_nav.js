@@ -46,6 +46,13 @@ const _nav = [
       },
     ],
   },
+  {
+    _component: 'CNavItem',
+    as: NavLink,
+    anchor: 'Acheivemnts',
+    to: '/Achievemtns',
+    icon: <CIcon name="cil-speedometer" customClassName="nav-icon" />,
+  },
 ]
 
 export default _nav

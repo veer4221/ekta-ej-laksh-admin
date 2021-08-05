@@ -48,6 +48,7 @@ const AddUser = React.lazy(() => import('./views/User/AddUser'))
 const UserList = React.lazy(() => import('./views/User/UserList'))
 const PostList = React.lazy(() => import('./views/Post/PostList'))
 const AddPost = React.lazy(() => import('./views/Post/AddPost'))
+const Achievemtns = React.lazy(() => import('./views/achievement/Achievement'))
 
 // const Login = React.lazy(() => import('./views/examples/pages/login/Login'))
 // const Register = React.lazy(() => import('./views/examples/pages/register/Register'))
@@ -108,6 +109,8 @@ const routes = [
   { path: '/Post', name: 'Post', component: PostList, exact: true },
   { path: '/Post/AddPost', name: 'AddPost', component: AddPost },
   { path: '/Post/PostList', name: 'PostList', component: PostList },
+  { path: '/Achievemtns', name: 'Achievemtns', component: Achievemtns, exact: true },
+
   // { path: '/login', name: 'Login', component: Login },
   // { path: '/register', name: 'Register', component: Register },
   // { path: '/404', name: '404', component: Page404 },

@@ -11,7 +11,7 @@ import '../style/table.css'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import CreateIcon from '@material-ui/icons/Create'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Row, Col } from 'react-bootstrap'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function AddPost() {
+export default function Achievement() {
   const classes = useStyles()
 
   return (
@@ -47,7 +47,7 @@ export default function AddPost() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <div style={{ display: 'flex' }}>
-              <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>Create Post</h4>
+              <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>Achievement</h4>
               <div style={{ textAlign: 'right', width: '50%', paddingRight: '10px' }}>
                 <Button variant="success">
                   <ArrowBackIcon />
@@ -63,22 +63,28 @@ export default function AddPost() {
           </Grid>
           <Grid item xs={12}>
             <Form style={{ paddingLeft: '50px', paddingRight: '50px' }}>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label style={{ color: '#4153a4' }}>Post Titel</Form.Label>
-                <Form.Control
-                  style={{ backgroundColor: '#eeeff7' }}
-                  type="text"
-                  placeholder="name@example.com"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                <Form.Label style={{ color: '#4153a4' }}>Post Content</Form.Label>
-                <Form.Control style={{ backgroundColor: '#eeeff7' }} as="textarea" rows={3} />
-              </Form.Group>
-              <Form.Group controlId="formFileLg" className="mb-3">
-                <Form.Label style={{ color: '#4153a4' }}>Large file input example</Form.Label>
-                <Form.Control style={{ backgroundColor: '#eeeff7' }} type="file" size="lg" />
-              </Form.Group>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label style={{ color: '#4153a4' }}>Love-Jihad Case</Form.Label>
+                  <Form.Control style={{ backgroundColor: '#eeeff7' }} type="number" />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label style={{ color: '#4153a4' }}>Ghar Vapsi Case</Form.Label>
+                  <Form.Control style={{ backgroundColor: '#eeeff7' }} type="number" />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label style={{ color: '#4153a4' }}>Gau Raksh Case</Form.Label>
+                  <Form.Control style={{ backgroundColor: '#eeeff7' }} type="number" />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label style={{ color: '#4153a4' }}>Rojgar Case</Form.Label>
+                  <Form.Control style={{ backgroundColor: '#eeeff7' }} type="number" />
+                </Form.Group>
+              </Row>
             </Form>
           </Grid>
           <Grid item xs={6}></Grid>
