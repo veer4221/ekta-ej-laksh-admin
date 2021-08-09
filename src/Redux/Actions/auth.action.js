@@ -1,14 +1,13 @@
 import { authConstants } from '../constants'
 import axios from '../../helper/axios'
+import { loginAPI } from '../../api/index'
 
 export const login = (user) => {
   console.log(user)
 
   return async (dispatch) => {
     dispatch({ type: authConstants.LOGIN_REQUEST })
-    const res = await axios.post(`/v1/auth/login`, {
-      ...user,
-    })
+    const res = await loginAPI(user)
     console.log(res)
     if (res.status === 200) {
       const { token, profile } = res.data.data
@@ -58,6 +57,7 @@ export const signout = () => {
     dispatch({ type: authConstants.LOGOUT_REQUEST })
 
     localStorage.clear()
+
     dispatch({ type: authConstants.LOGOUT_SUCCESS })
   }
 }

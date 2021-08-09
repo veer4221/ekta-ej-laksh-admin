@@ -45,6 +45,7 @@ const Badges = React.lazy(() => import('./views/components/notifications/badges/
 const Modals = React.lazy(() => import('./views/components/notifications/modals/Modals'))
 const Toasts = React.lazy(() => import('./views/components/notifications/toasts/Toasts'))
 const AddUser = React.lazy(() => import('./views/User/AddUser'))
+const ViewUser = React.lazy(() => import('./views/User/ViewUser'))
 const UserList = React.lazy(() => import('./views/User/UserList'))
 const PostList = React.lazy(() => import('./views/Post/PostList'))
 const AddPost = React.lazy(() => import('./views/Post/AddPost'))
@@ -105,6 +106,8 @@ const routes = [
   { path: '/notifications/toasts', name: 'Toasts', component: Toasts },
   { path: '/User', name: 'User', component: UserList, exact: true },
   { path: '/User/AddUser', name: 'AddUser', component: AddUser },
+  { path: '/User/EditUser', name: 'EditUser', component: AddUser },
+  { path: '/User/ViewUser', name: 'ViewUser', component: ViewUser },
   { path: '/User/UserList', name: 'UserList', component: UserList },
   { path: '/Post', name: 'Post', component: PostList, exact: true },
   { path: '/Post/AddPost', name: 'AddPost', component: AddPost },

@@ -17,6 +17,7 @@ import CIcon from '@coreui/icons-react'
 import { login } from '../../../Redux/Actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { successAlert } from '../../../sweetAlerts/alerts'
 
 const Login = () => {
   const [email, setEmail] = useState(``)
@@ -36,6 +37,7 @@ const Login = () => {
     dispatch(login(user))
   }
   if (auth.authenticate) {
+    successAlert('Login')
     return <Redirect to={`/`} />
   }
   return (

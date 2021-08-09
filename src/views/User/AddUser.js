@@ -12,7 +12,13 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import CreateIcon from '@material-ui/icons/Create'
 import { Form, Button, Row, Col } from 'react-bootstrap'
+
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addUser, resetUserState, viewUserAction } from 'src/Redux/Actions/user.action'
+import { Redirect, useHistory } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,17 +45,84 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function AddUser() {
+  const user = useSelector((state) => state.user)
+  const history = useHistory()
+  const [addForm, setAddForm] = useState(true)
+  const [firstName, setFirstName] = useState()
+  const [lastName, setLastName] = useState()
+  const [redirectTo, setRedirectTo] = useState(false)
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [mobileNumber, setMobileNumber] = useState()
+  const [address, setAddress] = useState()
   const classes = useStyles()
+  const url = window.location.href
+  const getLastItem = (thePath) => thePath.substring(thePath.lastIndexOf('/') + 1)
 
+  const dispatch = useDispatch()
+  const submitfunc = (e) => {
+    e.preventDefault()
+    const user = {
+      firstName,
+      lastName,
+      email,
+      mobileNumber,
+      address,
+    }
+    if (addForm) {
+      user.password = password
+      dispatch(addUser(user))
+    } else {
+      alert(true)
+    }
+  }
+
+  const setValueFunc = () => {
+    setFirstName(user.getUserInfo.firstName)
+    setLastName(user.getUserInfo.lastName)
+    setEmail(user.getUserInfo.email)
+    setMobileNumber(user.getUserInfo.mobileNumber)
+  }
+  useEffect(() => {
+    if (url.substring(url.lastIndexOf('/') + 1) == `EditUser`) {
+      setValueFunc()
+    }
+  }, [user.getUserInfo])
+  useEffect(() => {
+    if (url.substring(url.lastIndexOf('/') + 1) == `EditUser`) {
+      setAddForm(false)
+      dispatch(viewUserAction(1))
+    }
+  }, [])
+  useEffect(() => {
+    console.log('user', user)
+    if (user.message) {
+      setRedirectTo(true)
+    }
+    if (user.error) {
+      alert(user.error)
+    }
+  }, [user])
+  if (redirectTo) {
+    dispatch(resetUserState())
+    history.push('/User/UserList')
+  }
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <div style={{ display: 'flex' }}>
-              <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>Create User</h4>
+              <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>
+                {addForm ? `Create User` : `Edit User`}
+              </h4>
               <div style={{ textAlign: 'right', width: '50%', paddingRight: '10px' }}>
-                <Button variant="success">
+                <Button
+                  variant="success"
+                  onClick={() => {
+                    history.push('/User/UserList')
+                  }}
+                >
                   <ArrowBackIcon />
                   Back
                 </Button>
@@ -61,8 +134,8 @@ export default function AddUser() {
               {/* <TextField style={{ paddingRight: '10px' }} id="standard-basic" label="Search" /> */}
             </div>
           </Grid>
-          <Grid item xs={12}>
-            <Form style={{ paddingLeft: '50px', paddingRight: '50px' }}>
+          <Form style={{ paddingLeft: '50px', paddingRight: '50px' }} onSubmit={submitfunc}>
+            <Grid item xs={12}>
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label style={{ color: '#4153a4' }}>First Name</Form.Label>
@@ -70,6 +143,8 @@ export default function AddUser() {
                     style={{ backgroundColor: '#eeeff7' }}
                     type="text"
                     placeholder="First Name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Form.Group>
 
@@ -79,6 +154,8 @@ export default function AddUser() {
                     style={{ backgroundColor: '#eeeff7' }}
                     type="text"
                     placeholder="Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </Form.Group>
               </Row>
@@ -89,35 +166,44 @@ export default function AddUser() {
                     style={{ backgroundColor: '#eeeff7' }}
                     type="email"
                     placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} controlId="formGridPassword">
-                  <Form.Label style={{ color: '#4153a4' }}>Password</Form.Label>
-                  <Form.Control
-                    style={{ backgroundColor: '#eeeff7' }}
-                    type="password"
-                    placeholder="Password"
-                  />
-                </Form.Group>
+                {addForm ? (
+                  <Form.Group as={Col} controlId="formGridPassword">
+                    <Form.Label style={{ color: '#4153a4' }}>Password</Form.Label>
+                    <Form.Control
+                      style={{ backgroundColor: '#eeeff7' }}
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Form.Group>
+                ) : (
+                  ``
+                )}
               </Row>
               <Form.Group className="mb-3" controlId="formGridAddress1">
                 <Form.Label style={{ color: '#4153a4' }}>Address</Form.Label>
-                <Form.Control style={{ backgroundColor: '#eeeff7' }} placeholder="1234 Main St" />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formGridAddress2">
-                <Form.Label style={{ color: '#4153a4' }}>Address 2</Form.Label>
                 <Form.Control
                   style={{ backgroundColor: '#eeeff7' }}
-                  placeholder="Apartment, studio, or floor"
+                  placeholder="1234 Main St"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </Form.Group>
 
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label style={{ color: '#4153a4' }}>MobileNumber</Form.Label>
-                  <Form.Control style={{ backgroundColor: '#eeeff7' }} />
+                  <Form.Control
+                    style={{ backgroundColor: '#eeeff7' }}
+                    value={mobileNumber}
+                    onChange={(e) => setMobileNumber(e.target.value)}
+                  />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
@@ -132,24 +218,20 @@ export default function AddUser() {
                   <Form.Label style={{ color: '#4153a4' }}>Upload Identity Proof</Form.Label>
                   <Form.Control style={{ backgroundColor: '#eeeff7' }} type="file" />
                 </Form.Group>
-                {/* <Form.Group as={Col} controlId="formGridZip">
-                  <Form.Label style={{ color: '#4153a4' }}>Zip</Form.Label>
-                  <Form.Control /> */}
-                {/* </Form.Group> */}
               </Row>
-            </Form>
-          </Grid>
-          <Grid item xs={6}></Grid>
-          <Grid item xs={6}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="danger" style={{ margin: '10px' }}>
-                clear
-              </Button>
-              <Button variant="success" style={{ margin: '10px' }}>
-                Create
-              </Button>
-            </div>
-          </Grid>
+            </Grid>
+            <Grid item xs={6}></Grid>
+            <Grid item xs={6}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="danger" style={{ margin: '10px' }}>
+                  clear
+                </Button>
+                <Button variant="success" type="submit" style={{ margin: '10px' }}>
+                  {addForm ? `create` : `update`}
+                </Button>
+              </div>
+            </Grid>
+          </Form>
         </Grid>
       </Paper>
     </div>
