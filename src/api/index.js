@@ -9,3 +9,4 @@ export const getAllUserAPI = (page, limit, keyword) =>
   axios.get(`/v1/user/getAllUsers?page=${page}&limit=${limit}&keyword=${keyword}`)
 export const removeUserAPI = (id) => axios.get(`/v1/user/changeStatus?status=0&id=${id}`)
 export const getUserByIdAPI = (id) => axios.get(`v1/user/getUser?id=${id}`)
+export const editOldUserAPI = (user) => axios.post(`v1/user/updateUser`, { ...user })

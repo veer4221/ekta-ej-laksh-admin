@@ -83,6 +83,8 @@ const ViewUser = () => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
+              <hr></hr>
+
               <Table>
                 <TableHead>
                   <TableRow>
@@ -104,6 +106,8 @@ const ViewUser = () => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
+              <hr></hr>
+
               <Table>
                 <TableHead>
                   <TableRow>
@@ -183,6 +187,7 @@ const ViewUser = () => {
                 </TableHead>
               </Table>
             </Grid>
+
             <Grid item xs={12} sm={6}>
               <Table>
                 <TableHead>
@@ -202,6 +207,25 @@ const ViewUser = () => {
                   </TableRow>
                 </TableHead>
               </Table>
+            </Grid>
+            <Grid item xs={12} sm={6}></Grid>
+            <Grid item xs={12} sm={12}>
+              <hr></hr>
+              <h3 style={{ textAlign: 'center' }}>Document Image</h3>
+              <hr></hr>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}
+            >
+              <img
+                src={`https://health-image-maruti.s3.us-east-2.amazonaws.com/${data && data.image}`}
+                alt="doc image"
+                width="400px"
+                height="400px"
+              />
             </Grid>
           </Grid>
         </Card>

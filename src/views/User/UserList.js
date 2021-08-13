@@ -195,7 +195,12 @@ export default function PostList() {
                                 >
                                   <VisibilityIcon style={{ color: 'black' }} />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    localStorage.setItem('UserEditId', data.id)
+                                    history.push('/User/EditUser')
+                                  }}
+                                >
                                   <CreateIcon style={{ color: 'blue' }} />
                                 </IconButton>
                                 <IconButton onClick={(e) => removeUserFunc(data.id)}>

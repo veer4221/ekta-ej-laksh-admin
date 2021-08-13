@@ -16,9 +16,15 @@ import { Form, Button, Row, Col } from 'react-bootstrap'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addUser, resetUserState, viewUserAction } from 'src/Redux/Actions/user.action'
+import {
+  addUser,
+  resetUserState,
+  viewUserAction,
+  editUserAction,
+} from 'src/Redux/Actions/user.action'
 import { Redirect, useHistory } from 'react-router-dom'
 import { useEffect } from 'react'
+import { convertBase64 } from '../../helper/base64Converter'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +55,7 @@ export default function AddUser() {
   const history = useHistory()
   const [addForm, setAddForm] = useState(true)
   const [firstName, setFirstName] = useState()
+  const [image, setImage] = useState()
   const [lastName, setLastName] = useState()
   const [redirectTo, setRedirectTo] = useState(false)
   const [email, setEmail] = useState()
@@ -58,15 +65,23 @@ export default function AddUser() {
   const classes = useStyles()
   const url = window.location.href
   const getLastItem = (thePath) => thePath.substring(thePath.lastIndexOf('/') + 1)
+  const uploadImage = async (e) => {
+    console.log(e.target.files)
+    const file = e.target.files[0]
+    console.log(file)
+    const base64 = await convertBase64(file)
+    console.log(base64, 'bsae')
+    setImage(base64)
+  }
 
   const dispatch = useDispatch()
-  const submitfunc = (e) => {
-    e.preventDefault()
+  const addUserFuncOnSubmit = () => {
     const user = {
       firstName,
       lastName,
       email,
       mobileNumber,
+      image,
       address,
     }
     if (addForm) {
@@ -74,6 +89,26 @@ export default function AddUser() {
       dispatch(addUser(user))
     } else {
       alert(true)
+    }
+  }
+  const editUserFuncOnSubmit = () => {
+    alert('edit')
+    const editUser = {
+      firstName,
+      lastName,
+      id: localStorage.getItem(`UserEditId`),
+      email,
+      mobileNumber,
+      address,
+    }
+    dispatch(editUserAction(editUser))
+  }
+  const submitfunc = (e) => {
+    e.preventDefault()
+    if (addForm) {
+      addUserFuncOnSubmit()
+    } else {
+      editUserFuncOnSubmit()
     }
   }
 
@@ -91,7 +126,7 @@ export default function AddUser() {
   useEffect(() => {
     if (url.substring(url.lastIndexOf('/') + 1) == `EditUser`) {
       setAddForm(false)
-      dispatch(viewUserAction(1))
+      dispatch(viewUserAction(localStorage.getItem(`UserEditId`)))
     }
   }, [])
   useEffect(() => {
@@ -110,31 +145,31 @@ export default function AddUser() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <div style={{ display: 'flex' }}>
-              <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>
-                {addForm ? `Create User` : `Edit User`}
-              </h4>
-              <div style={{ textAlign: 'right', width: '50%', paddingRight: '10px' }}>
-                <Button
-                  variant="success"
-                  onClick={() => {
-                    history.push('/User/UserList')
-                  }}
-                >
-                  <ArrowBackIcon />
-                  Back
-                </Button>
+        <Form style={{ paddingLeft: '50px', paddingRight: '50px' }} onSubmit={submitfunc}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex' }}>
+                <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>
+                  {addForm ? `Create User` : `Edit User`}
+                </h4>
+                <div style={{ textAlign: 'right', width: '50%', paddingRight: '10px' }}>
+                  <Button
+                    variant="success"
+                    onClick={() => {
+                      history.push('/User/UserList')
+                    }}
+                  >
+                    <ArrowBackIcon />
+                    Back
+                  </Button>
+                </div>
               </div>
-            </div>
-            <br></br>
-            <Divider />
-            <div style={{ width: '90%', textAlign: 'right' }}>
-              {/* <TextField style={{ paddingRight: '10px' }} id="standard-basic" label="Search" /> */}
-            </div>
-          </Grid>
-          <Form style={{ paddingLeft: '50px', paddingRight: '50px' }} onSubmit={submitfunc}>
+              <br></br>
+              <Divider />
+              <div style={{ width: '90%', textAlign: 'right' }}>
+                {/* <TextField style={{ paddingRight: '10px' }} id="standard-basic" label="Search" /> */}
+              </div>
+            </Grid>
             <Grid item xs={12}>
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridEmail">
@@ -214,11 +249,32 @@ export default function AddUser() {
                     <option>admin</option>
                   </Form.Select>
                 </Form.Group>
-                <Form.Group as={Col} controlId="formFile" className="mb-3">
-                  <Form.Label style={{ color: '#4153a4' }}>Upload Identity Proof</Form.Label>
-                  <Form.Control style={{ backgroundColor: '#eeeff7' }} type="file" />
-                </Form.Group>
               </Row>
+              {addForm ? (
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formFile" className="mb-3">
+                    <Form.Label style={{ color: '#4153a4' }}>Upload Identity Proof</Form.Label>
+                    <Form.Control
+                      style={{ backgroundColor: '#eeeff7' }}
+                      type="file"
+                      onChange={(e) => {
+                        uploadImage(e)
+                      }}
+                    />
+                  </Form.Group>
+
+                  <Form.Group as={Col} controlId="formFile" className="mb-3">
+                    <img
+                      style={{ border: '1px solid red', borderRadius: '4%' }}
+                      src={image}
+                      height="100px"
+                      width="100px"
+                    />
+                  </Form.Group>
+                </Row>
+              ) : (
+                ``
+              )}
             </Grid>
             <Grid item xs={6}></Grid>
             <Grid item xs={6}>
@@ -231,8 +287,8 @@ export default function AddUser() {
                 </Button>
               </div>
             </Grid>
-          </Form>
-        </Grid>
+          </Grid>
+        </Form>
       </Paper>
     </div>
   )

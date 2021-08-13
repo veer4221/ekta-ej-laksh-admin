@@ -98,6 +98,28 @@ export default (state = initState, action) => {
         loading: false,
         getUserInfo: action.payload.userInfo,
       }
+    case userContants.UPDATE_USER_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      }
+      break
+    case userContants.UPDATE_USER_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+        error: null,
+      }
+      break
+    case userContants.UPDATE_USER_FAILURE:
+      state = {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        message: null,
+      }
+      break
   }
 
   return state

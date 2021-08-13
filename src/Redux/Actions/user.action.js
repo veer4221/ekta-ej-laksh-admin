@@ -1,6 +1,12 @@
 import { authConstants, userContants } from '../constants'
 import axios from '../../helper/axios'
-import { createNewUserAPI, getAllUserAPI, removeUserAPI, getUserByIdAPI } from '../../api/index'
+import {
+  createNewUserAPI,
+  getAllUserAPI,
+  removeUserAPI,
+  getUserByIdAPI,
+  editOldUserAPI,
+} from '../../api/index'
 export const addUser = (user) => {
   console.log(user)
 
@@ -89,7 +95,7 @@ export const editUserAction = (user) => {
 
   return async (dispatch) => {
     dispatch({ type: userContants.UPDATE_USER_REQUEST })
-    const res = await createNewUserAPI(user)
+    const res = await editOldUserAPI(user)
     console.log('res', res)
     if (res.status === 200 && res.data.success == true) {
       console.log(true)
