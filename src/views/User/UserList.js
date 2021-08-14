@@ -48,18 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function PostList() {
+export default function UserList() {
   const classes = useStyles()
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const history = useHistory()
 
   const [page, setPage] = React.useState(1)
-
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
   const [open, setOpen] = React.useState(false)
-
   const [count, setCount] = React.useState()
   const [reloadAgain, setReloadAgain] = React.useState(new Date())
   const [userRows, setUserRows] = React.useState()

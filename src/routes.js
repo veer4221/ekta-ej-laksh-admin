@@ -49,6 +49,7 @@ const ViewUser = React.lazy(() => import('./views/User/ViewUser'))
 const UserList = React.lazy(() => import('./views/User/UserList'))
 const PostList = React.lazy(() => import('./views/Post/PostList'))
 const AddPost = React.lazy(() => import('./views/Post/AddPost'))
+const ViewPost = React.lazy(() => import('./views/Post/ViewPost'))
 const Achievemtns = React.lazy(() => import('./views/achievement/Achievement'))
 
 // const Login = React.lazy(() => import('./views/examples/pages/login/Login'))
@@ -108,6 +109,7 @@ const routes = [
   { path: '/User/AddUser', name: 'AddUser', component: AddUser },
   { path: '/User/EditUser', name: 'EditUser', component: AddUser },
   { path: '/User/ViewUser', name: 'ViewUser', component: ViewUser },
+  { path: '/Post/ViewPost', name: 'ViewPost', component: ViewPost },
   { path: '/User/UserList', name: 'UserList', component: UserList },
   { path: '/Post', name: 'Post', component: PostList, exact: true },
   { path: '/Post/AddPost', name: 'AddPost', component: AddPost },

@@ -10,3 +10,12 @@ export const convertBase64 = (file) => {
     }
   })
 }
+
+export const blobToBase64 = (blob) => {
+  var reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onloadend = function () {
+    var base64data = reader.result
+    console.log(base64data)
+  }
+}

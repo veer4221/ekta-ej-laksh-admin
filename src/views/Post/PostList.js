@@ -1,16 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Divider, Grid, TextField, IconButton, Button } from '@material-ui/core'
 import { lighten, makeStyles } from '@material-ui/core/styles'
 
 import TablePagination from '@material-ui/core/TablePagination'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
 
 import Paper from '@material-ui/core/Paper'
+import Pagination from '@material-ui/lab/Pagination'
 import '../style/table.css'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import CreateIcon from '@material-ui/icons/Create'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  deleteUserAction,
+  deletePostAction,
+  getPostListAction,
+  resetPostStateAction,
+} from 'src/Redux/Actions'
+import { DeleteAlert } from '../../sweetAlerts/alerts'
+import { Redirect } from 'react-router'
+import Swal from 'sweetalert2'
+import { useHistory } from 'react-router-dom'
+import withReactContent from 'sweetalert2-react-content'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,19 +55,77 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PostList() {
   const classes = useStyles()
-  const [page, setPage] = React.useState(0)
+  const user = useSelector((state) => state.user)
+  const post = useSelector((state) => state.post)
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const [page, setPage] = React.useState(1)
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
+  const [open, setOpen] = React.useState(false)
+
+  const [count, setCount] = React.useState()
+  const [reloadAgain, setReloadAgain] = React.useState(new Date())
+  const [postRows, setPostRows] = React.useState()
+  const [keyword, setKeyword] = React.useState('')
+
+  const handleChange = (event) => {
+    setRowsPerPage(event.target.value)
+    setPage(1)
+  }
+  const removeUserFunc = async (id) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
+      },
+      buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          swalWithBootstrapButtons.fire('Deleted!', `user is deleted`, 'success')
+          dispatch(deletePostAction(id))
+          dispatch(resetPostStateAction())
+          setReloadAgain(new Date())
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire('Cancelled', `User Not Deleted`, 'error')
+        }
+      })
+
+    //
+  }
+  const handleClose = () => {
+    setOpen(false)
   }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
+  const handleOpen = () => {
+    setOpen(true)
   }
 
+  useEffect(() => {
+    console.log(post.getAllProduct)
+    setCount(Math.floor(post.getAllProduct.count / rowsPerPage + 1))
+    setPostRows(post.getAllProduct.rows)
+  }, [post.getAllProduct])
+  useEffect(() => {
+    dispatch(getPostListAction(page, rowsPerPage, keyword))
+  }, [page, rowsPerPage, keyword, reloadAgain])
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -59,15 +134,27 @@ export default function PostList() {
             <div style={{ display: 'flex' }}>
               <h4 style={{ color: 'grey', paddingLeft: '10px', width: '50%' }}>Post List</h4>
               <div style={{ textAlign: 'right', width: '50%', paddingRight: '10px' }}>
-                <Button variant="contained" color="primary">
-                  AddPost
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    console.log(`clicked`)
+                    history.push(`/Post/AddPost`)
+                  }}
+                >
+                  Create Post
                 </Button>
               </div>
             </div>
             <br></br>
             <Divider />
             <div style={{ width: '90%', textAlign: 'right' }}>
-              <TextField style={{ paddingRight: '10px' }} id="standard-basic" label="Search" />
+              <TextField
+                style={{ paddingRight: '10px' }}
+                id="standard-basic"
+                label="Search"
+                onChange={(e) => setKeyword(e.target.value)}
+              />
             </div>
           </Grid>
           <Grid item xs={12} m={1} p={2}>
@@ -81,8 +168,8 @@ export default function PostList() {
                     <th style={{ textAlign: 'center' }} width="30%">
                       Titel
                     </th>
-                    <th style={{ textAlign: 'center' }} width="40%">
-                      Content
+                    <th style={{ textAlign: 'center' }} width="20%">
+                      createdBy
                     </th>
                     <th style={{ textAlign: 'center' }} width="20%">
                       Action
@@ -90,74 +177,72 @@ export default function PostList() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={{ textAlign: 'center' }}>1</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>
-                      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <IconButton>
-                          <VisibilityIcon style={{ color: 'black' }} />
-                        </IconButton>
-                        <IconButton>
-                          <CreateIcon style={{ color: 'blue' }} />
-                        </IconButton>
-                        <IconButton>
-                          <DeleteForeverIcon style={{ color: 'red' }} />
-                        </IconButton>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ textAlign: 'center' }}>2</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>
-                      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <IconButton>
-                          <VisibilityIcon style={{ color: 'black' }} />
-                        </IconButton>
-                        <IconButton>
-                          <CreateIcon style={{ color: 'blue' }} />
-                        </IconButton>
-                        <IconButton>
-                          <DeleteForeverIcon style={{ color: 'red' }} />
-                        </IconButton>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ textAlign: 'center' }}>3</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>
-                      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <IconButton>
-                          <VisibilityIcon style={{ color: 'black' }} />
-                        </IconButton>
-                        <IconButton>
-                          <CreateIcon style={{ color: 'blue' }} />
-                        </IconButton>
-                        <IconButton>
-                          <DeleteForeverIcon style={{ color: 'red' }} />
-                        </IconButton>
-                      </div>
-                    </td>
-                  </tr>
+                  {postRows &&
+                    postRows.slice(0, rowsPerPage).map((data, index) => {
+                      return (
+                        <>
+                          <tr key={`${index}`}>
+                            <td style={{ textAlign: 'center' }}>{index + 1}</td>
+                            <td>{data.title}</td>
+
+                            <td>veer</td>
+                            <td>
+                              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                <IconButton
+                                  onClick={(e) => {
+                                    localStorage.setItem('PostViewId', data.id)
+                                    history.push('/Post/ViewPost')
+                                  }}
+                                >
+                                  <VisibilityIcon style={{ color: 'black' }} />
+                                </IconButton>
+
+                                <IconButton onClick={(e) => removeUserFunc(data.id)}>
+                                  <DeleteForeverIcon style={{ color: 'red' }} />
+                                </IconButton>
+                              </div>
+                            </td>
+                          </tr>
+                        </>
+                      )
+                    })}
                 </tbody>
               </table>
             </div>
           </Grid>
+          <Grid item xs={6} m={1} p={2} style={{ margin: '10px' }}>
+            <FormControl
+              style={{ minWidth: 250, marginBottom: '15px' }}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-controlled-open-select-label">Limit</InputLabel>
+              <Select
+                labelId="demo-controlled-open-select-label"
+                id="demo-controlled-open-select"
+                open={open}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                value={rowsPerPage}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={25}>25</MenuItem>
+              </Select>
+            </FormControl>
+            <Pagination
+              count={count}
+              variant="outlined"
+              color="primary"
+              shape="rounded"
+              onChange={(e, value) => setPage(value)}
+            />
+          </Grid>
         </Grid>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={10}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
     </div>
   )
