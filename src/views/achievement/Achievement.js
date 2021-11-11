@@ -84,6 +84,10 @@ export default function Achievement() {
                   <Form.Label style={{ color: '#4153a4' }}>Rojgar Case</Form.Label>
                   <Form.Control style={{ backgroundColor: '#eeeff7' }} type="number" />
                 </Form.Group>
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label style={{ color: '#4153a4' }}>GauSeva Case</Form.Label>
+                  <Form.Control style={{ backgroundColor: '#eeeff7' }} type="number" />
+                </Form.Group>
               </Row>
             </Form>
           </Grid>

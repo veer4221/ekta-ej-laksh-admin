@@ -53,6 +53,27 @@ const _nav = [
     to: '/Achievemtns',
     icon: <CIcon name="cil-speedometer" customClassName="nav-icon" />,
   },
+  {
+    _component: 'CNavGroup',
+    as: NavLink,
+    anchor: 'Business',
+    to: '/to',
+    icon: <CIcon name="cil-user" customClassName="nav-icon" />,
+    items: [
+      {
+        _component: 'CNavItem',
+        as: NavLink,
+        anchor: 'Add Business',
+        to: '/business/Addbusiness',
+      },
+      {
+        _component: 'CNavItem',
+        as: NavLink,
+        anchor: 'Business List',
+        to: '/business',
+      },
+    ],
+  },
 ]
 
 export default _nav

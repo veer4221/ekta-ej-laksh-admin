@@ -94,7 +94,7 @@ const ViewPost = () => {
               style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}
             >
               <img
-                src={`https://health-image-maruti.s3.us-east-2.amazonaws.com/${data && data.image}`}
+                src={`https://ekta-ej-laksh-image.s3.us-east-2.amazonaws.com/${data && data.image}`}
                 alt="doc image"
                 width="400px"
                 height="400px"

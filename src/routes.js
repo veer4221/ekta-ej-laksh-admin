@@ -51,6 +51,9 @@ const PostList = React.lazy(() => import('./views/Post/PostList'))
 const AddPost = React.lazy(() => import('./views/Post/AddPost'))
 const ViewPost = React.lazy(() => import('./views/Post/ViewPost'))
 const Achievemtns = React.lazy(() => import('./views/achievement/Achievement'))
+const AddBusiness = React.lazy(() => import('./views/business/AddBusiness'))
+const BusinessList = React.lazy(() => import('./views/business/BusinessList'))
+const ViewBusiness = React.lazy(() => import('./views/business/ViewBusiness'))
 
 // const Login = React.lazy(() => import('./views/examples/pages/login/Login'))
 // const Register = React.lazy(() => import('./views/examples/pages/register/Register'))
@@ -108,6 +111,10 @@ const routes = [
   { path: '/User', name: 'User', component: UserList, exact: true },
   { path: '/User/AddUser', name: 'AddUser', component: AddUser },
   { path: '/User/EditUser', name: 'EditUser', component: AddUser },
+  { path: '/User/ViewUser', name: 'ViewUser', component: ViewUser },
+  { path: '/Business', name: 'Business', component: BusinessList, exact: true },
+  { path: '/Business/AddBusiness', name: 'AddBusiness', component: AddBusiness },
+  { path: '/Business/EditBusiness', name: 'EditBusiness', component: AddBusiness },
   { path: '/User/ViewUser', name: 'ViewUser', component: ViewUser },
   { path: '/Post/ViewPost', name: 'ViewPost', component: ViewPost },
   { path: '/User/UserList', name: 'UserList', component: UserList },
