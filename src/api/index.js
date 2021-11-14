@@ -17,3 +17,6 @@ export const getPostByIdAPI = (id) => axios.get(`/v1/post/getPost?id=${id}`)
 export const getAllPostAPI = (page, limit, keyword) =>
   axios.get(`v1/post/getAllPost?page=${page}&limit=${limit}&keyword=${keyword}`)
 export const removePostAPI = (id) => axios.get(`/v1/post/removePost?status=0&id=${id}`)
+
+export const createBusinessAPI = (data) => axios.post(`v1/business/addbusiness`, data)
+export const getAllBusinessApi = () => axios.get(`/v1/business/getAllBusiness`)

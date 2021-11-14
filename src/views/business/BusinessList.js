@@ -1,26 +1,27 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { Divider, Grid, TextField, IconButton, Button } from '@material-ui/core'
-import { lighten, makeStyles } from '@material-ui/core/styles'
+import '../style/table.css'
 
-import TablePagination from '@material-ui/core/TablePagination'
+import { Button, Divider, Grid, IconButton, TextField } from '@material-ui/core'
+import React, { useEffect } from 'react'
+import { deleteUserAction, getUserListAction, resetUserState } from 'src/Redux/Actions'
+import { lighten, makeStyles } from '@material-ui/core/styles'
+import { useDispatch, useSelector } from 'react-redux'
+
+import CreateIcon from '@material-ui/icons/Create'
+import { DeleteAlert } from '../../sweetAlerts/alerts'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
-
-import Paper from '@material-ui/core/Paper'
 import Pagination from '@material-ui/lab/Pagination'
-import '../style/table.css'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import VisibilityIcon from '@material-ui/icons/Visibility'
-import CreateIcon from '@material-ui/icons/Create'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteUserAction, getUserListAction, resetUserState } from 'src/Redux/Actions'
-import { DeleteAlert } from '../../sweetAlerts/alerts'
+import Paper from '@material-ui/core/Paper'
+import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
+import Select from '@material-ui/core/Select'
 import Swal from 'sweetalert2'
+import TablePagination from '@material-ui/core/TablePagination'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import clsx from 'clsx'
+import { getAllBusinessApi } from 'src/api'
 import { useHistory } from 'react-router-dom'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -57,6 +58,7 @@ export default function BusinessList() {
   const [page, setPage] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [open, setOpen] = React.useState(false)
+  const [Data, setData] = React.useState(false)
   const [count, setCount] = React.useState()
   const [reloadAgain, setReloadAgain] = React.useState(new Date())
   const [userRows, setUserRows] = React.useState()
@@ -108,15 +110,21 @@ export default function BusinessList() {
   const handleOpen = () => {
     setOpen(true)
   }
-
-  useEffect(() => {
-    console.log(user.getAllProduct)
-    setCount(Math.floor(user.getAllProduct.count / rowsPerPage + 1))
-    setUserRows(user.getAllProduct.rows)
-  }, [user.getAllProduct])
-  useEffect(() => {
-    dispatch(getUserListAction(page, rowsPerPage, keyword))
-  }, [page, rowsPerPage, keyword, reloadAgain])
+  useEffect(async () => {
+    const response = await getAllBusinessApi()
+    console.log(response)
+    if (response.data.success) {
+      setData(response.data)
+    }
+  }, [])
+  // useEffect(() => {
+  //   console.log(user.getAllProduct)
+  //   setCount(Math.floor(user.getAllProduct.count / rowsPerPage + 1))
+  //   setUserRows(user.getAllProduct.rows)
+  // }, [user.getAllProduct])
+  // useEffect(() => {
+  //   dispatch(getUserListAction(page, rowsPerPage, keyword))
+  // }, [page, rowsPerPage, keyword, reloadAgain])
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -157,13 +165,13 @@ export default function BusinessList() {
                       #
                     </th>
                     <th style={{ textAlign: 'center' }} width="30%">
-                      Name
+                      Business Name
                     </th>
                     <th style={{ textAlign: 'center' }} width="20%">
-                      Email
+                      Business Title
                     </th>
                     <th style={{ textAlign: 'center' }} width="20%">
-                      Mobile
+                      Business Mobile
                     </th>
                     <th style={{ textAlign: 'center' }} width="20%">
                       Action
@@ -171,17 +179,15 @@ export default function BusinessList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {userRows &&
-                    userRows.slice(0, rowsPerPage).map((data, index) => {
+                  {Data &&
+                    Data.rows.map((data, index) => {
                       return (
                         <>
                           <tr key={`${index}`}>
                             <td style={{ textAlign: 'center' }}>{index + 1}</td>
-                            <td>
-                              {data.firstname}&nbsp; {data.lastname}
-                            </td>
-                            <td>{data.email}</td>
-                            <td>{data.mobileNumber}</td>
+                            <td>{data.business_title}&nbsp;</td>
+                            <td> {data.business_Name}</td>
+                            <td>{data.business_contect_number}</td>
                             <td>
                               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                                 <IconButton
