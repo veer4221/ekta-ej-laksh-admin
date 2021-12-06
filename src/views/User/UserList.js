@@ -1,26 +1,27 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { Divider, Grid, TextField, IconButton, Button } from '@material-ui/core'
-import { lighten, makeStyles } from '@material-ui/core/styles'
+import '../style/table.css'
 
-import TablePagination from '@material-ui/core/TablePagination'
+import { Button, Divider, Grid, IconButton, TextField } from '@material-ui/core'
+import React, { useEffect } from 'react'
+import { deleteUserAction, getUserListAction, resetUserState } from 'src/Redux/Actions'
+import { lighten, makeStyles } from '@material-ui/core/styles'
+import { useDispatch, useSelector } from 'react-redux'
+
+import CreateIcon from '@material-ui/icons/Create'
+import { DeleteAlert } from '../../sweetAlerts/alerts'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import DraftsIcon from '@material-ui/icons/Drafts'
+import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
-
-import Paper from '@material-ui/core/Paper'
 import Pagination from '@material-ui/lab/Pagination'
-import '../style/table.css'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import VisibilityIcon from '@material-ui/icons/Visibility'
-import CreateIcon from '@material-ui/icons/Create'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteUserAction, getUserListAction, resetUserState } from 'src/Redux/Actions'
-import { DeleteAlert } from '../../sweetAlerts/alerts'
+import Paper from '@material-ui/core/Paper'
+import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
+import Select from '@material-ui/core/Select'
 import Swal from 'sweetalert2'
+import TablePagination from '@material-ui/core/TablePagination'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import clsx from 'clsx'
 import { useHistory } from 'react-router-dom'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -202,6 +203,14 @@ export default function UserList() {
                                 </IconButton>
                                 <IconButton onClick={(e) => removeUserFunc(data.id)}>
                                   <DeleteForeverIcon style={{ color: 'red' }} />
+                                </IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    localStorage.setItem('userIdForIcard', data.id)
+                                    history.push('/User/uploadIcard')
+                                  }}
+                                >
+                                  <DraftsIcon style={{ color: 'blue' }} />
                                 </IconButton>
                               </div>
                             </td>

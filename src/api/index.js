@@ -20,3 +20,4 @@ export const removePostAPI = (id) => axios.get(`/v1/post/removePost?status=0&id=
 
 export const createBusinessAPI = (data) => axios.post(`v1/business/addbusiness`, data)
 export const getAllBusinessApi = () => axios.get(`/v1/business/getAllBusiness`)
+export const uploadIcardAPI = (userIcardObj) => axios.post(`/v1/user/icardUpload`, userIcardObj)

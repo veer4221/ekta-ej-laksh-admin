@@ -46,6 +46,7 @@ const Modals = React.lazy(() => import('./views/components/notifications/modals/
 const Toasts = React.lazy(() => import('./views/components/notifications/toasts/Toasts'))
 const AddUser = React.lazy(() => import('./views/User/AddUser'))
 const ViewUser = React.lazy(() => import('./views/User/ViewUser'))
+const UploadIcard = React.lazy(() => import('./views/User/UploadIcard'))
 const UserList = React.lazy(() => import('./views/User/UserList'))
 const PostList = React.lazy(() => import('./views/Post/PostList'))
 const AddPost = React.lazy(() => import('./views/Post/AddPost'))
@@ -109,6 +110,7 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/notifications/toasts', name: 'Toasts', component: Toasts },
   { path: '/User', name: 'User', component: UserList, exact: true },
+  { path: '/User/UploadIcard', name: 'UploadIcard', component: UploadIcard },
   { path: '/User/AddUser', name: 'AddUser', component: AddUser },
   { path: '/User/EditUser', name: 'EditUser', component: AddUser },
   { path: '/User/ViewUser', name: 'ViewUser', component: ViewUser },

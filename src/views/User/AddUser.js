@@ -1,30 +1,29 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { Divider, Grid, TextField, IconButton } from '@material-ui/core'
-import { lighten, makeStyles } from '@material-ui/core/styles'
-
-import TablePagination from '@material-ui/core/TablePagination'
-
-import Paper from '@material-ui/core/Paper'
 import '../style/table.css'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import VisibilityIcon from '@material-ui/icons/Visibility'
-import CreateIcon from '@material-ui/icons/Create'
-import { Form, Button, Row, Col } from 'react-bootstrap'
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Button, Col, Form, Row } from 'react-bootstrap'
+import { Divider, Grid, IconButton, TextField } from '@material-ui/core'
+import { Redirect, useHistory } from 'react-router-dom'
 import {
   addUser,
+  editUserAction,
   resetUserState,
   viewUserAction,
-  editUserAction,
 } from 'src/Redux/Actions/user.action'
-import { Redirect, useHistory } from 'react-router-dom'
-import { useEffect } from 'react'
+import { lighten, makeStyles } from '@material-ui/core/styles'
+import { useDispatch, useSelector } from 'react-redux'
+
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import CreateIcon from '@material-ui/icons/Create'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import Paper from '@material-ui/core/Paper'
+import PropTypes from 'prop-types'
+import React from 'react'
+import TablePagination from '@material-ui/core/TablePagination'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import clsx from 'clsx'
 import { convertBase64 } from '../../helper/base64Converter'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddUser() {
   const user = useSelector((state) => state.user)
+  const classes = useStyles()
   const history = useHistory()
   const [addForm, setAddForm] = useState(true)
   const [firstName, setFirstName] = useState()
@@ -62,7 +62,8 @@ export default function AddUser() {
   const [password, setPassword] = useState()
   const [mobileNumber, setMobileNumber] = useState()
   const [address, setAddress] = useState()
-  const classes = useStyles()
+  const [iCardImage, setiCardImage] = useState()
+  const [icard_id, setIcard_id] = useState()
   const url = window.location.href
   const getLastItem = (thePath) => thePath.substring(thePath.lastIndexOf('/') + 1)
   const uploadImage = async (e) => {
